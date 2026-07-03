@@ -1,0 +1,499 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Grupo Funciones Creación Solped y Reserv</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZGF_SD_SOLPED_RESERVAF01</SOBJ_NAME>
+    <SOBJ_NAME>LZGF_SD_SOLPED_RESERVATOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZGF_SD_SOLPED_RESERVA</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZFU_MM_RELEASE_PO</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Liberar pedido</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_EBELN</PARAMETER>
+       <TYP>EBELN</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <TYP>ZES_SD_RETURN</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_EBELN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número del documento de compras</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return RFC</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFU_MM_REQUISITION_RELEASE</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Liberar pedido</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_BANFN</PARAMETER>
+       <TYP>BANFN</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_BNFPO</PARAMETER>
+       <TYP>BNFPO</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <TYP>ZES_SD_RETURN</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_BANFN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número del documento de compras</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_BNFPO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número de posición de la solicitud de pedido</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return RFC</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFU_SD_CREA_RESERVA</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Creación Reserva desde Legado</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_HEADER</PARAMETER>
+       <DBFIELD>ZES_SD_RESER_CA</DBFIELD>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <TYP>ZES_SD_RETURN</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>EX_RSNUM</PARAMETER>
+       <TYP>RSNUM</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>TA_DETAIL</PARAMETER>
+       <DBSTRUCT>ZES_SD_RESER_DE</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_HEADER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Estructura Cabecera Reserva</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return RFC</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_RSNUM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número de la reserva/las necesidades secundarias</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TA_DETAIL</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Estructura Detalle Reserva</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFU_SD_CREA_SOLPED</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Creación de Solped desde Legacy</SHORT_TEXT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_SOLPED</PARAMETER>
+       <TYP>BANFN</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <TYP>ZES_SD_RETURN</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>TA_ITEMS</PARAMETER>
+       <DBSTRUCT>ZES_SD_SOLPED</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>EX_SOLPED</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número de la solicitud de pedido</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return RFC</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TA_ITEMS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Estructura Input RFC Creación SOLPED</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFU_SD_NUM_SOLPED_PEDIDOS</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Numero Solped / Pedidos a Liberar</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_USUARIO</PARAMETER>
+       <TYP>ACTORID</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_NUM_SOLPED</PARAMETER>
+       <TYP>INT1</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>EX_NUM_PEDIDOS</PARAMETER>
+       <TYP>INT1</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_USUARIO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ID de usuar.responsable en la gestión de organización</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_NUM_SOLPED</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número de Solped a Liberar</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_NUM_PEDIDOS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número de Pedidos a Liberar</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFU_SD_PEDIDOS_LIBERAR</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Consultar los pedidos a liberar</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_USUARIO</PARAMETER>
+       <TYP>ACTORID</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_TIPOLIB</PARAMETER>
+       <TYP>CHAR02</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <DBFIELD>ZES_SD_RETURN</DBFIELD>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>TA_PEDIDOS</PARAMETER>
+       <DBSTRUCT>ZES_SD_PEDIDOS_LIBE</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_USUARIO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ID de usuar.responsable en la gestión de organización</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_TIPOLIB</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Tipo Liberación (Solped &apos;SP&apos;, Pedidos &apos;PE&apos;)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return RFC</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TA_PEDIDOS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Pedidos a Liberar</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFU_SD_PEDIDOS_LIBERAR_D</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Detalles pedidos a liberar</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>EX_EBELN</PARAMETER>
+       <TYP>EBELN</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <TYP>ZES_SD_RETURN</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>TA_PEDIDOS</PARAMETER>
+       <DBSTRUCT>ZES_SD_PEDIDOS_LIBE</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>EX_EBELN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número del documento de compras</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return RFC</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TA_PEDIDOS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Pedidos a Liberar</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFU_SD_PEDIDOS_LIBERAR_H</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Pedidos a liberar Cabecera</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_USUARIO</PARAMETER>
+       <TYP>ACTORID</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <TYP>ZES_SD_RETURN</TYP>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>TA_PEDIDOS</PARAMETER>
+       <DBSTRUCT>ZES_SD_PEDIDOS_LIBE</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_USUARIO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ID de usuar.responsable en la gestión de organización</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return RFC</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TA_PEDIDOS</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Pedidos a Liberar</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFU_SD_RECHAZA_PEDIDO</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Rechaza Pedido</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_EBELN</PARAMETER>
+       <TYP>EBELN</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <DBFIELD>ZES_SD_RETURN</DBFIELD>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_EBELN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número del documento de compras</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return RFC</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFU_SD_RECHAZA_SOLPED</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Rechaza Pedido</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_BANFN</PARAMETER>
+       <TYP>BANFN</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_BNFPO</PARAMETER>
+       <TYP>BNFPO</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <DBFIELD>ZES_SD_RETURN</DBFIELD>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_BANFN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número del documento de compras</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_BNFPO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número de posición de la solicitud de pedido</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return RFC</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFU_SD_SOLPED_LIBERAR</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Consultar las Solped a Liberar</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_USUARIO</PARAMETER>
+       <TYP>ACTORID</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_TIPOLIB</PARAMETER>
+       <TYP>CHAR02</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <DBFIELD>ZES_SD_RETURN</DBFIELD>
+      </RSEXP>
+     </EXPORT>
+     <TABLES>
+      <RSTBL>
+       <PARAMETER>TA_SOLPED_LIBE</PARAMETER>
+       <DBSTRUCT>ZES_SD_SOLPED_LIBE</DBSTRUCT>
+      </RSTBL>
+     </TABLES>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_USUARIO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ID de usuar.responsable en la gestión de organización</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_TIPOLIB</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ITipo Liberación (Solped &apos;SP&apos;, Pedidos &apos;PE&apos;)</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return RFC</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>TA_SOLPED_LIBE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Solped a liberar sistema web</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFU_SD_SOLPED_LIBERAR_D</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Detalle posición solped</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IM_BANFN</PARAMETER>
+       <TYP>BANFN</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IM_BNFPO</PARAMETER>
+       <TYP>BNFPO</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EX_SOLPED</PARAMETER>
+       <DBFIELD>ZES_SD_SOLPED_LIBE</DBFIELD>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <DBFIELD>ZES_SD_RETURN</DBFIELD>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IM_BANFN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número de la solicitud de pedido</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IM_BNFPO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Número de posición de la solicitud de pedido</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_SOLPED</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Solped a liberar sistema web</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EX_RETURN</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Return RFC</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>
