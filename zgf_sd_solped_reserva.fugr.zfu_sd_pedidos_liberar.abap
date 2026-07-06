@@ -1,0 +1,87 @@
+FUNCTION zfu_sd_pedidos_liberar.
+*"----------------------------------------------------------------------
+*"*"Interfase local
+*"  IMPORTING
+*"     VALUE(IM_USUARIO) TYPE  ACTORID
+*"     VALUE(IM_TIPOLIB) TYPE  CHAR02
+*"  EXPORTING
+*"     VALUE(EX_RETURN) LIKE  ZES_SD_RETURN STRUCTURE  ZES_SD_RETURN
+*"  TABLES
+*"      TA_PEDIDOS STRUCTURE  ZES_SD_PEDIDOS_LIBE
+*"----------------------------------------------------------------------
+  CLEAR: zg_t_t16fw[], zg_e_et16f.
+
+  TRANSLATE im_usuario TO UPPER CASE.
+
+  IF im_usuario IS INITIAL.
+    ex_return-codigo  = '4'.
+    ex_return-mensaje = 'Debe ingresar Usuario'.
+  ELSE.
+
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*    SELECT mandt frggr frgco werks otype objid
+*      INTO TABLE zg_t_t16fw
+*      FROM t16fw
+*     WHERE frggr IN ('V1','Z1')
+*       AND objid = im_usuario.
+*
+* NEW CODE
+    SELECT mandt frggr frgco werks otype objid
+
+      INTO TABLE zg_t_t16fw
+      FROM t16fw
+     WHERE frggr IN ('V1','Z1')
+       AND objid = im_usuario ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
+
+    IF sy-subrc = 0.
+
+      PERFORM f_buscar_estrategia_usuario USING zg_e_et16f
+                                                im_tipolib
+                                       CHANGING ex_return.
+
+      CHECK zg_t_ekpot[] IS NOT INITIAL.
+      PERFORM f_set_salida_pedidos TABLES ta_pedidos.
+    ELSE.
+
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*      SELECT mandt frggr frgco objid
+*        INTO TABLE zg_t_zt16f
+*        FROM zt16fw
+*       WHERE frggr = 'SL'
+*         AND objid = im_usuario.
+*
+* NEW CODE
+      SELECT mandt frggr frgco objid
+
+        INTO TABLE zg_t_zt16f
+        FROM zt16fw
+       WHERE frggr = 'SL'
+         AND objid = im_usuario ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
+
+      IF sy-subrc = 0.
+        LOOP AT zg_t_zt16f INTO zg_e_zt16f.
+          zg_e_t16fw-frggr = zg_e_zt16f-frggr.
+          zg_e_t16fw-frgco = zg_e_zt16f-frgco.
+          APPEND zg_e_t16fw TO zg_t_t16fw.
+        ENDLOOP.
+
+        PERFORM f_buscar_estrategia_usuario USING zg_e_et16f
+                                                  im_tipolib
+                                         CHANGING ex_return.
+
+        CHECK zg_t_ekpot[] IS NOT INITIAL.
+        PERFORM f_set_salida_pedidos TABLES ta_pedidos.
+      ELSE.
+        ex_return-codigo  = '4'.
+        ex_return-mensaje = 'Usuario No Asignado para codigo de liberación'.
+      ENDIF.
+    ENDIF.
+  ENDIF.
+
+ENDFUNCTION.
