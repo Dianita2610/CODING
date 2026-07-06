@@ -28,7 +28,7 @@ FUNCTION zfu_sd_crea_solped.
     IF zl_v_indic IS INITIAL.
       PERFORM f_set_items_text TABLES ta_items.
 
-      CALL FUNCTION 'BAPI_REQUISITION_CREATE'
+      CALL FUNCTION 'BAPI_REQUISITION_CREATE' "#EC CI_USAGE_OK[2438131]
 *       EXPORTING
 *         SKIP_ITEMS_WITH_ERROR                =
 *         AUTOMATIC_SOURCE                     = 'X'

@@ -42,7 +42,7 @@ FUNCTION zfu_sd_crea_reserva.
       PERFORM f_set_items_re TABLES ta_detail
                               USING im_header.
 
-      CALL FUNCTION 'BAPI_RESERVATION_CREATE1'
+      CALL FUNCTION 'BAPI_RESERVATION_CREATE1' "#EC CI_USAGE_OK[2438131]
         EXPORTING
           reservationheader          = zg_e_heade
        IMPORTING

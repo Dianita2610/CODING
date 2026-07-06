@@ -28,26 +28,63 @@ FORM f_get_mara .
   CLEAR: zg_t_mara[], zg_t_makt[].
 
   IF s_matnr[] IS INITIAL.
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*    SELECT matnr mtart meins ersda laeda
+*      INTO TABLE zg_t_mara
+*      FROM mara
+*     WHERE "matnr IN s_matnr
+*          ( ersda IN s_ersda ) OR
+*          ( laeda IN s_ersda ).
+*
+* NEW CODE
     SELECT matnr mtart meins ersda laeda
+
       INTO TABLE zg_t_mara
       FROM mara
      WHERE "matnr IN s_matnr
           ( ersda IN s_ersda ) OR
-          ( laeda IN s_ersda ).
+          ( laeda IN s_ersda ) ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
   ELSE.
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*    SELECT matnr mtart meins ersda laeda
+*      INTO TABLE zg_t_mara
+*      FROM mara
+*     WHERE matnr IN s_matnr.
+*
+* NEW CODE
     SELECT matnr mtart meins ersda laeda
+
       INTO TABLE zg_t_mara
       FROM mara
-     WHERE matnr IN s_matnr.
+     WHERE matnr IN s_matnr ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
   ENDIF.
 
   IF sy-subrc = 0.
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*    SELECT matnr maktx
+*      INTO TABLE zg_t_makt
+*      FROM makt
+*      FOR ALL ENTRIES IN zg_t_mara
+*     WHERE matnr = zg_t_mara-matnr
+*       AND spras = 'S'.
+*
+* NEW CODE
     SELECT matnr maktx
+
       INTO TABLE zg_t_makt
       FROM makt
       FOR ALL ENTRIES IN zg_t_mara
      WHERE matnr = zg_t_mara-matnr
-       AND spras = 'S'.
+       AND spras = 'S' ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
   ENDIF.
 
 ENDFORM.                    " F_GET_MARA
@@ -97,19 +134,44 @@ ENDFORM.                    " F_GET_LOG
 FORM f_get_asmd.
   CLEAR: zg_t_asmd[], zg_t_asmt[].
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*  SELECT asnum astyp meins erdat aedat
+*    INTO TABLE zg_t_asmd
+*    FROM asmd
+*   WHERE ( erdat IN s_ersda ) OR
+*         ( aedat IN s_ersda ).
+*
+* NEW CODE
   SELECT asnum astyp meins erdat aedat
+
     INTO TABLE zg_t_asmd
     FROM asmd
    WHERE ( erdat IN s_ersda ) OR
-         ( aedat IN s_ersda ).
+         ( aedat IN s_ersda ) ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
   IF sy-subrc = 0.
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*    SELECT asnum asktx
+*      INTO TABLE zg_t_asmt
+*      FROM asmdt
+*      FOR ALL ENTRIES IN zg_t_asmd
+*     WHERE asnum = zg_t_asmd-asnum
+*       AND spras = 'S'.
+*
+* NEW CODE
     SELECT asnum asktx
+
       INTO TABLE zg_t_asmt
       FROM asmdt
       FOR ALL ENTRIES IN zg_t_asmd
      WHERE asnum = zg_t_asmd-asnum
-       AND spras = 'S'.
+       AND spras = 'S' ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
   ENDIF.
 
 ENDFORM.                    " F_GET_ASMD

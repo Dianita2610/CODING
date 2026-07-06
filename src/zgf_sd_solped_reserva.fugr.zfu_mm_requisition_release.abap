@@ -9,21 +9,47 @@ FUNCTION zfu_mm_requisition_release.
 *"----------------------------------------------------------------------
 
   IF im_banfn IS NOT INITIAL AND im_bnfpo IS NOT INITIAL.
-    SELECT SINGLE banfn bnfpo badat ernam werks menge meins matnr frgst frgzu frggr frgkz
+* BEGIN. 06-07-2026 - ATC - ATC-01
+* OLD CODE
+*    SELECT SINGLE banfn bnfpo badat ernam werks menge meins matnr frgst frgzu frggr frgkz
+*        INTO zg_e_eban2
+*        FROM eban
+*       WHERE banfn EQ im_banfn
+*         AND bnfpo EQ im_bnfpo.
+*
+* NEW CODE
+    SELECT banfn bnfpo badat ernam werks menge meins matnr frgst frgzu frggr frgkz
+    UP TO 1 ROWS 
         INTO zg_e_eban2
         FROM eban
        WHERE banfn EQ im_banfn
-         AND bnfpo EQ im_bnfpo.
+         AND bnfpo EQ im_bnfpo ORDER BY PRIMARY KEY.
+
+    ENDSELECT.
+* END. 06-07-2026 - ATC - ATC-01
 
     IF sy-subrc = 0.
       IF zg_e_eban2-frgkz <> '2'.
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*        SELECT mandt frggr frgsx frgco frga1 frga2 frga3 frga4 frga5
+*           frga6 frga7 frga8
+*          FROM t16fv
+*          INTO TABLE zg_t_t16fv
+*         WHERE frggr = zg_e_eban2-frggr
+*           AND frgsx = zg_e_eban2-frgst.
+*
+* NEW CODE
         SELECT mandt frggr frgsx frgco frga1 frga2 frga3 frga4 frga5
            frga6 frga7 frga8
+
           FROM t16fv
           INTO TABLE zg_t_t16fv
          WHERE frggr = zg_e_eban2-frggr
-           AND frgsx = zg_e_eban2-frgst.
+           AND frgsx = zg_e_eban2-frgst ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
         IF sy-subrc = 0.
 

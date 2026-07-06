@@ -120,10 +120,22 @@ FORM f_consul_ewerk  USING us_ewerk
 
   DATA: zl_v_werks TYPE t001w-werks.
 
-  SELECT SINGLE werks
+* BEGIN. 06-07-2026 - ATC - ATC-01
+* OLD CODE
+*  SELECT SINGLE werks
+*    INTO zl_v_werks
+*    FROM t001w
+*   WHERE werks = us_ewerk.
+*
+* NEW CODE
+  SELECT werks
+  UP TO 1 ROWS 
     INTO zl_v_werks
     FROM t001w
-   WHERE werks = us_ewerk.
+   WHERE werks = us_ewerk ORDER BY PRIMARY KEY.
+
+  ENDSELECT.
+* END. 06-07-2026 - ATC - ATC-01
 
   IF sy-subrc <> 0.
     CONCATENATE 'El campo EWERK' us_ewerk
@@ -147,11 +159,24 @@ FORM f_consul_lgord  USING us_lgort
 
   DATA: zl_v_lgort TYPE t001l-lgort.
 
-  SELECT SINGLE lgort
+* BEGIN. 06-07-2026 - ATC - ATC-01
+* OLD CODE
+*  SELECT SINGLE lgort
+*    INTO zl_v_lgort
+*    FROM t001l
+*   WHERE werks = us_werks
+*     AND lgort = us_lgort.
+*
+* NEW CODE
+  SELECT lgort
+  UP TO 1 ROWS 
     INTO zl_v_lgort
     FROM t001l
    WHERE werks = us_werks
-     AND lgort = us_lgort.
+     AND lgort = us_lgort ORDER BY PRIMARY KEY.
+
+  ENDSELECT.
+* END. 06-07-2026 - ATC - ATC-01
 
   IF sy-subrc <> 0.
     CONCATENATE 'El campo LGORT_D' us_lgort
@@ -174,10 +199,22 @@ FORM f_consul_matnr  USING us_matnr
 
   DATA: zl_v_matnr TYPE mara-matnr.
 
-  SELECT SINGLE matnr
+* BEGIN. 06-07-2026 - ATC - ATC-01
+* OLD CODE
+*  SELECT SINGLE matnr
+*    INTO zl_v_matnr
+*    FROM mara
+*   WHERE matnr = us_matnr.
+*
+* NEW CODE
+  SELECT matnr
+  UP TO 1 ROWS 
     INTO zl_v_matnr
     FROM mara
-   WHERE matnr = us_matnr.
+   WHERE matnr = us_matnr ORDER BY PRIMARY KEY.
+
+  ENDSELECT.
+* END. 06-07-2026 - ATC - ATC-01
 
   IF sy-subrc <> 0.
     CONCATENATE 'El campo MATNR' us_matnr
@@ -320,17 +357,41 @@ ENDFORM.                    " F_SET_ITEM_SERV
 FORM f_get_mara_asmd  TABLES ta_items STRUCTURE zes_sd_solped.
   CLEAR: zg_t_marat[], zg_t_asmdt[].
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*  SELECT matnr matkl meins
+*    FROM mara
+*    INTO TABLE zg_t_marat
+*    FOR ALL ENTRIES IN ta_items
+*   WHERE matnr = ta_items-matnr.
+*
+* NEW CODE
   SELECT matnr matkl meins
+
     FROM mara
     INTO TABLE zg_t_marat
     FOR ALL ENTRIES IN ta_items
-   WHERE matnr = ta_items-matnr.
+   WHERE matnr = ta_items-matnr ORDER BY PRIMARY KEY.
 
+* END. 06-07-2026 - ATC - ATC-03
+
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*  SELECT asnum matkl meins
+*    FROM asmd
+*    INTO TABLE zg_t_asmdt
+*    FOR ALL ENTRIES IN ta_items
+*   WHERE asnum = ta_items-matnr.
+*
+* NEW CODE
   SELECT asnum matkl meins
+
     FROM asmd
     INTO TABLE zg_t_asmdt
     FOR ALL ENTRIES IN ta_items
-   WHERE asnum = ta_items-matnr.
+   WHERE asnum = ta_items-matnr ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
 ENDFORM.                    " F_GET_MARA_ASMD
 *&---------------------------------------------------------------------*
@@ -451,13 +512,27 @@ FORM f_buscar_estrategia_usuario USING us_t16fw LIKE zg_e_et16f
   CLEAR: zg_t_t16fv[], zg_t_ebant[], zg_t_ekkot[], zg_t_ekpot[], zg_t_makt[],
          ra_frgsx[]  , ra_frgzu[]  , zg_t_frgst[].
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*  SELECT mandt frggr frgsx frgco frga1 frga2 frga3 frga4 frga5
+*         frga6 frga7 frga8
+*    FROM t16fv
+*    INTO TABLE zg_t_t16fv
+*    FOR ALL ENTRIES IN zg_t_t16fw
+*   WHERE frggr = zg_t_t16fw-frggr
+*     AND frgco = zg_t_t16fw-frgco.
+*
+* NEW CODE
   SELECT mandt frggr frgsx frgco frga1 frga2 frga3 frga4 frga5
          frga6 frga7 frga8
+
     FROM t16fv
     INTO TABLE zg_t_t16fv
     FOR ALL ENTRIES IN zg_t_t16fw
    WHERE frggr = zg_t_t16fw-frggr
-     AND frgco = zg_t_t16fw-frgco.
+     AND frgco = zg_t_t16fw-frgco ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
   LOOP AT zg_t_t16fw INTO zg_e_t16fw.
     LOOP AT zg_t_t16fv INTO zg_e_t16fv WHERE frggr = zg_e_t16fw-frggr AND
@@ -492,63 +567,142 @@ FORM f_buscar_estrategia_usuario USING us_t16fw LIKE zg_e_et16f
   IF zg_t_frgst[] IS NOT INITIAL.
 
     IF us_tipol = 'SP'.
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*      SELECT banfn bnfpo badat ernam werks menge meins matnr frgst frggr
+*        INTO TABLE zg_t_ebant
+*        FROM eban
+*        FOR ALL ENTRIES IN zg_t_frgst
+*       WHERE ( frgkz = ' ' OR frgkz = 'X')
+*         AND frgst EQ zg_t_frgst-frgst
+*         AND frgzu EQ zg_t_frgst-frgzu.
+*
+* NEW CODE
       SELECT banfn bnfpo badat ernam werks menge meins matnr frgst frggr
+
         INTO TABLE zg_t_ebant
         FROM eban
         FOR ALL ENTRIES IN zg_t_frgst
        WHERE ( frgkz = ' ' OR frgkz = 'X')
          AND frgst EQ zg_t_frgst-frgst
-         AND frgzu EQ zg_t_frgst-frgzu.
+         AND frgzu EQ zg_t_frgst-frgzu ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
       IF sy-subrc <> 0.
         ch_retur-codigo  = '4'.
         ch_retur-mensaje = 'No posee Solped para liberar'.
       ELSE.
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*        SELECT matnr maktx
+*          INTO TABLE zg_t_makt
+*          FROM makt
+*          FOR ALL ENTRIES IN zg_t_ebant
+*         WHERE matnr = zg_t_ebant-matnr
+*           AND spras = 'S'.
+*
+* NEW CODE
         SELECT matnr maktx
+
           INTO TABLE zg_t_makt
           FROM makt
           FOR ALL ENTRIES IN zg_t_ebant
          WHERE matnr = zg_t_ebant-matnr
-           AND spras = 'S'.
+           AND spras = 'S' ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
       ENDIF.
     ELSEIF us_tipol = 'PE'.
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*      SELECT ebeln waers bedat lifnr
+*        FROM ekko
+*        INTO TABLE zg_t_ekkot
+*        FOR ALL ENTRIES IN zg_t_frgst
+*        WHERE ( frgke = '' OR frgke = '1')
+*         AND frgsx EQ zg_t_frgst-frgst
+*         AND frgzu EQ zg_t_frgst-frgzu
+*         AND bstyp EQ 'F'.
+*
+* NEW CODE
       SELECT ebeln waers bedat lifnr
+
         FROM ekko
         INTO TABLE zg_t_ekkot
         FOR ALL ENTRIES IN zg_t_frgst
         WHERE ( frgke = '' OR frgke = '1')
          AND frgsx EQ zg_t_frgst-frgst
          AND frgzu EQ zg_t_frgst-frgzu
-         AND bstyp EQ 'F'.
+         AND bstyp EQ 'F' ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
       IF sy-subrc <> 0.
         ch_retur-codigo  = '4'.
         ch_retur-mensaje = 'No posee Pedidos para liberar'.
       ELSE.
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*        SELECT lifnr name1 name2
+*          FROM lfa1
+*          INTO TABLE zg_t_lfa1
+*          FOR ALL ENTRIES IN zg_t_ekkot
+*         WHERE lifnr = zg_t_ekkot-lifnr.
+*
+* NEW CODE
         SELECT lifnr name1 name2
+
           FROM lfa1
           INTO TABLE zg_t_lfa1
           FOR ALL ENTRIES IN zg_t_ekkot
-         WHERE lifnr = zg_t_ekkot-lifnr.
+         WHERE lifnr = zg_t_ekkot-lifnr ORDER BY PRIMARY KEY.
 
+* END. 06-07-2026 - ATC - ATC-03
+
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*        SELECT ebeln ebelp matnr werks knttp menge meins netpr banfn bnfpo
+*          FROM ekpo
+*          INTO TABLE zg_t_ekpot
+*          FOR ALL ENTRIES IN zg_t_ekkot
+*         WHERE ebeln = zg_t_ekkot-ebeln.
+*
+* NEW CODE
         SELECT ebeln ebelp matnr werks knttp menge meins netpr banfn bnfpo
+
           FROM ekpo
           INTO TABLE zg_t_ekpot
           FOR ALL ENTRIES IN zg_t_ekkot
-         WHERE ebeln = zg_t_ekkot-ebeln.
+         WHERE ebeln = zg_t_ekkot-ebeln ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
         IF sy-subrc = 0.
           PERFORM f_get_liberador.
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*          SELECT matnr maktx
+*            INTO TABLE zg_t_makt
+*            FROM makt
+*            FOR ALL ENTRIES IN zg_t_ekpot
+*           WHERE matnr = zg_t_ekpot-matnr
+*             AND spras = 'S'.
+*
+* NEW CODE
           SELECT matnr maktx
+
             INTO TABLE zg_t_makt
             FROM makt
             FOR ALL ENTRIES IN zg_t_ekpot
            WHERE matnr = zg_t_ekpot-matnr
-             AND spras = 'S'.
+             AND spras = 'S' ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
         ENDIF.
       ENDIF.
     ENDIF.
@@ -571,11 +725,23 @@ FORM f_set_salida TABLES ta_solped STRUCTURE zes_sd_solped_libe.
 
   CLEAR: zg_t_t001w[].
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*  SELECT werks name1
+*    INTO TABLE zg_t_t001w
+*    FROM t001w
+*    FOR ALL ENTRIES IN zg_t_ebant
+*   WHERE werks = zg_t_ebant-werks.
+*
+* NEW CODE
   SELECT werks name1
+
     INTO TABLE zg_t_t001w
     FROM t001w
     FOR ALL ENTRIES IN zg_t_ebant
-   WHERE werks = zg_t_ebant-werks.
+   WHERE werks = zg_t_ebant-werks ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
   LOOP AT zg_t_ebant INTO zg_e_ebant.
     CLEAR: zl_v_name, ta_solped.
@@ -670,11 +836,23 @@ FORM f_set_salida_pedidos  TABLES ta_pedidos STRUCTURE zes_sd_pedidos_libe.
 
   CLEAR: zg_t_t001w[].
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*  SELECT werks name1
+*    INTO TABLE zg_t_t001w
+*    FROM t001w
+*    FOR ALL ENTRIES IN zg_t_ekpot
+*   WHERE werks = zg_t_ekpot-werks.
+*
+* NEW CODE
   SELECT werks name1
+
     INTO TABLE zg_t_t001w
     FROM t001w
     FOR ALL ENTRIES IN zg_t_ekpot
-   WHERE werks = zg_t_ekpot-werks.
+   WHERE werks = zg_t_ekpot-werks ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
   LOOP AT zg_t_ekpot INTO zg_e_ekpot.
     CLEAR: zl_v_name.
@@ -779,18 +957,43 @@ FORM f_set_salida_pedidos_pe  TABLES ta_pedidos STRUCTURE zes_sd_pedidos_libe.
 
   READ TABLE zg_t_ekpot INTO zg_e_ekpot INDEX 1.
   IF sy-subrc = 0.
-    SELECT SINGLE werks name1
+* BEGIN. 06-07-2026 - ATC - ATC-01
+* OLD CODE
+*    SELECT SINGLE werks name1
+*      INTO zg_e_t001w
+*      FROM t001w
+*     WHERE werks = zg_e_ekpot-werks.
+*
+* NEW CODE
+    SELECT werks name1
+    UP TO 1 ROWS 
       INTO zg_e_t001w
       FROM t001w
-     WHERE werks = zg_e_ekpot-werks.
+     WHERE werks = zg_e_ekpot-werks ORDER BY PRIMARY KEY.
+
+    ENDSELECT.
+* END. 06-07-2026 - ATC - ATC-01
   ENDIF.
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*  SELECT matnr maktx
+*    INTO TABLE zg_t_makt
+*    FROM makt
+*    FOR ALL ENTRIES IN zg_t_ekpot
+*   WHERE matnr = zg_t_ekpot-matnr
+*     AND spras = 'S'.
+*
+* NEW CODE
   SELECT matnr maktx
+
     INTO TABLE zg_t_makt
     FROM makt
     FOR ALL ENTRIES IN zg_t_ekpot
    WHERE matnr = zg_t_ekpot-matnr
-     AND spras = 'S'.
+     AND spras = 'S' ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
   LOOP AT zg_t_ekpot INTO zg_e_ekpot.
     CLEAR: zl_v_name.
@@ -835,21 +1038,48 @@ ENDFORM.                    " F_SET_SALIDA_PEDIDOS_PE
 FORM f_get_liberador .
   CLEAR: zg_t_ebanl[], zg_t_cdpos[], zg_t_t16fs[], zg_e_t16fs, zg_e_cdpos, zg_e_ebant.
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*  SELECT banfn bnfpo badat ernam werks menge meins matnr frgst frggr
+*    FROM eban
+*    INTO TABLE zg_t_ebanl
+*    FOR ALL ENTRIES IN zg_t_ekpot
+*   WHERE banfn = zg_t_ekpot-banfn(10)
+*     AND bnfpo = zg_t_ekpot-bnfpo.
+*
+* NEW CODE
   SELECT banfn bnfpo badat ernam werks menge meins matnr frgst frggr
+
     FROM eban
     INTO TABLE zg_t_ebanl
     FOR ALL ENTRIES IN zg_t_ekpot
    WHERE banfn = zg_t_ekpot-banfn(10)
-     AND bnfpo = zg_t_ekpot-bnfpo.
+     AND bnfpo = zg_t_ekpot-bnfpo ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
   IF sy-subrc = 0.
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*    SELECT objectclas objectid changenr tcode
+*      FROM cdhdr
+*      INTO TABLE zg_t_cdhdr
+*      FOR ALL ENTRIES IN zg_t_ebanl
+*     WHERE objectclas EQ 'BANF'
+*       AND objectid   EQ zg_t_ebanl-banfn
+*       AND tcode      IN ('ME54N', 'ME55').
+*
+* NEW CODE
     SELECT objectclas objectid changenr tcode
+
       FROM cdhdr
       INTO TABLE zg_t_cdhdr
       FOR ALL ENTRIES IN zg_t_ebanl
      WHERE objectclas EQ 'BANF'
        AND objectid   EQ zg_t_ebanl-banfn
-       AND tcode      IN ('ME54N', 'ME55').
+       AND tcode      IN ('ME54N', 'ME55') ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
     IF sy-subrc = 0.
 SELECT objectclas objectid changenr tabname fname chngind value_new
@@ -867,12 +1097,25 @@ AND CHNGIND = 'U' ORDER BY PRIMARY KEY .
 *End of change: ReSQ Correction for Addition ORDER BY PRIMARY KEY 19/12/2019 EY_DES01 ECDK917080 *
 
       IF sy-subrc = 0.
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*        SELECT frggr frgsx frgc1 frgc2 frgc3 frgc4 frgc5 frgc6 frgc7 frgc8
+*          INTO TABLE zg_t_t16fs
+*          FROM t16fs
+*          FOR ALL ENTRIES IN zg_t_ebanl
+*         WHERE frggr EQ zg_t_ebanl-frggr
+*           AND frgsx EQ zg_t_ebanl-frgst.
+*
+* NEW CODE
         SELECT frggr frgsx frgc1 frgc2 frgc3 frgc4 frgc5 frgc6 frgc7 frgc8
+
           INTO TABLE zg_t_t16fs
           FROM t16fs
           FOR ALL ENTRIES IN zg_t_ebanl
          WHERE frggr EQ zg_t_ebanl-frggr
-           AND frgsx EQ zg_t_ebanl-frgst.
+           AND frgsx EQ zg_t_ebanl-frgst ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
       ENDIF.
     ENDIF.
 
@@ -924,12 +1167,26 @@ FORM f_set_liberador  CHANGING ch_liber.
           ENDCASE.
 
           IF zg_v_frgco IS NOT INITIAL.
-            SELECT SINGLE frgct
+* BEGIN. 06-07-2026 - ATC - ATC-01
+* OLD CODE
+*            SELECT SINGLE frgct
+*              FROM t16fd
+*              INTO zg_v_frgct
+*              WHERE spras = 'S'
+*                AND frggr = zg_e_ebant-frggr
+*                AND frgco = zg_v_frgco.
+*
+* NEW CODE
+            SELECT frgct
+            UP TO 1 ROWS 
               FROM t16fd
               INTO zg_v_frgct
               WHERE spras = 'S'
                 AND frggr = zg_e_ebant-frggr
-                AND frgco = zg_v_frgco.
+                AND frgco = zg_v_frgco ORDER BY PRIMARY KEY.
+
+            ENDSELECT.
+* END. 06-07-2026 - ATC - ATC-01
 
             IF sy-subrc = 0.
               ch_liber = zg_v_frgct.

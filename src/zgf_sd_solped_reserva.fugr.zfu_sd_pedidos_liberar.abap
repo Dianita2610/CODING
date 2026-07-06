@@ -18,11 +18,23 @@ FUNCTION zfu_sd_pedidos_liberar.
     ex_return-mensaje = 'Debe ingresar Usuario'.
   ELSE.
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*    SELECT mandt frggr frgco werks otype objid
+*      INTO TABLE zg_t_t16fw
+*      FROM t16fw
+*     WHERE frggr IN ('V1','Z1')
+*       AND objid = im_usuario.
+*
+* NEW CODE
     SELECT mandt frggr frgco werks otype objid
+
       INTO TABLE zg_t_t16fw
       FROM t16fw
      WHERE frggr IN ('V1','Z1')
-       AND objid = im_usuario.
+       AND objid = im_usuario ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
     IF sy-subrc = 0.
 
@@ -34,11 +46,23 @@ FUNCTION zfu_sd_pedidos_liberar.
       PERFORM f_set_salida_pedidos TABLES ta_pedidos.
     ELSE.
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*      SELECT mandt frggr frgco objid
+*        INTO TABLE zg_t_zt16f
+*        FROM zt16fw
+*       WHERE frggr = 'SL'
+*         AND objid = im_usuario.
+*
+* NEW CODE
       SELECT mandt frggr frgco objid
+
         INTO TABLE zg_t_zt16f
         FROM zt16fw
        WHERE frggr = 'SL'
-         AND objid = im_usuario.
+         AND objid = im_usuario ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
       IF sy-subrc = 0.
         LOOP AT zg_t_zt16f INTO zg_e_zt16f.

@@ -8,20 +8,45 @@ FUNCTION zfu_mm_release_po.
 *"----------------------------------------------------------------------
 
   IF im_ebeln IS NOT INITIAL.
-    SELECT SINGLE ebeln waers bedat lifnr frggr frgsx frgke frgzu
+* BEGIN. 06-07-2026 - ATC - ATC-01
+* OLD CODE
+*    SELECT SINGLE ebeln waers bedat lifnr frggr frgsx frgke frgzu
+*      FROM ekko
+*      INTO zg_e_ekko2
+*     WHERE ebeln = im_ebeln.
+*
+* NEW CODE
+    SELECT ebeln waers bedat lifnr frggr frgsx frgke frgzu
+    UP TO 1 ROWS 
       FROM ekko
       INTO zg_e_ekko2
-     WHERE ebeln = im_ebeln.
+     WHERE ebeln = im_ebeln ORDER BY PRIMARY KEY.
+
+    ENDSELECT.
+* END. 06-07-2026 - ATC - ATC-01
 
     IF sy-subrc = 0.
       IF zg_e_ekko2-frgke <> '2'.
 
+* BEGIN. 06-07-2026 - ATC - ATC-03
+* OLD CODE
+*        SELECT mandt frggr frgsx frgco frga1 frga2 frga3 frga4 frga5
+*           frga6 frga7 frga8
+*          FROM t16fv
+*          INTO TABLE zg_t_t16fv
+*         WHERE frggr = zg_e_ekko2-frggr
+*           AND frgsx = zg_e_ekko2-frgsx.
+*
+* NEW CODE
         SELECT mandt frggr frgsx frgco frga1 frga2 frga3 frga4 frga5
            frga6 frga7 frga8
+
           FROM t16fv
           INTO TABLE zg_t_t16fv
          WHERE frggr = zg_e_ekko2-frggr
-           AND frgsx = zg_e_ekko2-frgsx.
+           AND frgsx = zg_e_ekko2-frgsx ORDER BY PRIMARY KEY.
+
+* END. 06-07-2026 - ATC - ATC-03
 
         IF sy-subrc = 0.
 

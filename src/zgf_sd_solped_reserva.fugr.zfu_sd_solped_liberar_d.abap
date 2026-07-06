@@ -13,17 +13,42 @@ FUNCTION zfu_sd_solped_liberar_d.
 
   CLEAR: zg_e_t001w, zg_e_ebant, ex_solped.
 
-  SELECT SINGLE banfn bnfpo badat ernam werks menge meins
+* BEGIN. 06-07-2026 - ATC - ATC-01
+* OLD CODE
+*  SELECT SINGLE banfn bnfpo badat ernam werks menge meins
+*    INTO zg_e_ebant
+*    FROM eban
+*   WHERE banfn = im_banfn
+*     AND bnfpo = im_bnfpo.
+*
+* NEW CODE
+  SELECT banfn bnfpo badat ernam werks menge meins
+  UP TO 1 ROWS 
     INTO zg_e_ebant
     FROM eban
    WHERE banfn = im_banfn
-     AND bnfpo = im_bnfpo.
+     AND bnfpo = im_bnfpo ORDER BY PRIMARY KEY.
+
+  ENDSELECT.
+* END. 06-07-2026 - ATC - ATC-01
 
   IF sy-subrc = 0.
-    SELECT SINGLE werks name1
+* BEGIN. 06-07-2026 - ATC - ATC-01
+* OLD CODE
+*    SELECT SINGLE werks name1
+*      INTO zg_e_t001w
+*      FROM t001w
+*     WHERE werks = zg_e_ebant-werks.
+*
+* NEW CODE
+    SELECT werks name1
+    UP TO 1 ROWS 
       INTO zg_e_t001w
       FROM t001w
-     WHERE werks = zg_e_ebant-werks.
+     WHERE werks = zg_e_ebant-werks ORDER BY PRIMARY KEY.
+
+    ENDSELECT.
+* END. 06-07-2026 - ATC - ATC-01
 
     ex_solped-banfn = zg_e_ebant-banfn.
     ex_solped-bnfpo = zg_e_ebant-bnfpo.
